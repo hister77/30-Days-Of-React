@@ -96,8 +96,14 @@ const averageRating = function(product) {
 }
 
 // 4. Create a function called likeProduct. This function will helps to like to the product if it is not liked and remove like if it was liked.
-const likeProduct = (products, userID) => {
-    const likedProduct = products.find(product=>product.likes.includes(userID))
-    if (likedProduct) likedProduct.likes.splice(likedProduct.indexOf(userID), 1)
-    else likedProduct.likes.push(userID)
+const likeProduct = (products, productID, userID) => {
+    const product = products.find(p=>p['_id']==productID)
+    if (product.likes.includes(userID)) product.likes.splice(product.likes.indexOf(userID), 1)
+    else product.likes.push(userID)
 }
+
+//test it
+likeProduct(products, 'hedfcg', 'eefamr')
+console.log(products[2])
+likeProduct(products, 'hedfcg', 'eefamr')
+console.log(products[2])
