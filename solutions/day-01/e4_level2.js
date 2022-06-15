@@ -89,9 +89,9 @@ function sum() {
 }
 
 // 14. Declare a function name userIdGenerator. When this function is called it generates seven character id. The function return the id.
-function userIdGenerator() {
+const userIdGenerator = function (l=7) {
     let uid = ''
-    while (uid.length < 7) {
+    while (uid.length < l) {
         let c = Math.floor(Math.random()*36)
         if (c < 10) uid += String.fromCodePoint(48+c)
         else Math.floor(Math.random()*2) == 0
@@ -101,4 +101,4 @@ function userIdGenerator() {
     return uid
 }
 
-console.log(userIdGenerator());
+module.exports = userIdGenerator
