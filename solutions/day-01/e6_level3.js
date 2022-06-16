@@ -9,14 +9,18 @@ class Statistics {
     }
     
     #freq() {
-        const occurrences = {}
-        for (let i = 0; i < this.data.length ; i++) {
-            occurrences.hasOwnProperty(this.data[i])
-                ? occurrences[this.data[i]]++
-                : occurrences[this.data[i]] = 1
+        const occurrences = []
+        const keys = []
+        const data = this.data
+        for (const i in data) {
+            if (keys.includes(String(data[i])))
+                occurrences[occurrences.findIndex(v=>v[0]==data[i])][1]++
+            else {
+                occurrences.push([String(data[i]), 1])
+                keys.push(String(data[i]))
+            }
         }
-        const sorted_by_value = Object.keys(occurrences).sort(function(a,b){return occurrences[b]-occurrences[a]})
-        return { occurrences, sorted_by_value }
+        return occurrences.sort((a,b)=>b[1]-a[1])
     }
 
     constructor(data) {
@@ -35,26 +39,25 @@ class Statistics {
     }
 
     mode() {
-        const { occurrences, sorted_by_value } = this.#freq()
-        const mode = {}
-        for (const key of sorted_by_value) {
-            if (Object.keys(mode).length < 1 || Object.values(mode).includes(occurrences[key]))
-                mode[key] = occurrences[key]
+        const occurrences = this.#freq()
+        const mode = []
+        for (const i in occurrences) {
+            if (mode.length < 1 || mode.reduce(function(a,v) { a.push(v[1]);  return a; }, []).includes(occurrences[i][1]))
+                mode.push(occurrences[i][0], occurrences[i][1])
             else break;
         }
         return mode
     }
 
     freqDist() {
-        const { occurrences, sorted_by_value } = this.#freq()
-        const sorted_freq_dist = []
+        const occurrences = this.#freq()
+        const freq_dist = []
         const count = this.count()
-        for (let i = 0; i < sorted_by_value.length; i++) {
-            const key = sorted_by_value[i]
-            sorted_freq_dist.push([this.#round(Number(occurrences[key] / count * 100), 1), key])
+        for (const i in occurrences) {
+            const key = occurrences[i][0]
+            freq_dist.push([this.#round(occurrences[i][1] / count, 2), key])
         }
-        return sorted_freq_dist
-
+        return freq_dist
     }
 
     range() {
